@@ -1,0 +1,7 @@
+{
+  "name": "imgur PWA",
+  "short_name": "imgur PWA",
+  "description": "A Progressive Web App (PWA) version of imgur.com",
+  "start_url": "/",
+  "display": "standalone"
+}
