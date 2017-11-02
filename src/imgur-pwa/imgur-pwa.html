@@ -10,6 +10,8 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 
+<link rel="import" href="img-list.html">
+
 <dom-module id="imgur-pwa">
   <template>
     <style>
@@ -41,16 +43,8 @@
       </paper-input>
     </div>
 
-    <!--
-    <img-box></img-box>
-    -->
+    <img-list id="list"></img-list>
 
-    <!--
-    <iron-pages selected="[[view]]" attr-for-selected="name" fallback-selection="list">
-      <img-list-page name="list" subroute="[[subroute]]"></img-list-page>
-      <img-details-page name="details" subroute="[[subroute]]"></img-details-page>
-    </iron-pages>
-    -->
   </template>
 
   <script>
@@ -134,8 +128,6 @@
 
         fetch('https://api.imgur.com/3/gallery/r/' + subreddit_name + '/top/day', {method: "GET", headers: {"Authorization": "Client-ID 30928b75b48a449"}})
         .then((response) => {
-          console.log(response.text());
-
           if(response.ok)
             return response.text()
 
@@ -143,7 +135,7 @@
         })
         .then((response) => {
           let returnedData = JSON.parse(response);
-
+          
           return this.$.list.loadImages(returnedData);
         }, () => {
           this.$.list.showNotFound();
