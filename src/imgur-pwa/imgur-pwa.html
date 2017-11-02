@@ -5,6 +5,10 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-location/iron-location.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 
 <dom-module id="imgur-pwa">
   <template>
@@ -12,18 +16,41 @@
       :host {
         display: block;
       }
+
+      app-header {
+        --app-header-shadow: {
+          box-shadow: inset 0px 5px 2px -3px rgba(0, 0, 0, 0.2);
+        };
+      }
     </style>
 
     <app-location route="{{route}}"></app-location>
-    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+    <app-route route="{{route}}" pattern="/subreddit" tail="{{subredditRoute}}"></app-route>
+    <app-route route="{{subredditRoute}}" pattern="/:subredditName" data="{{subredditData}}"></app-route>
+    <iron-location path="{{path}}"></iron-location>
     
-    <app-header condenses reveals>
+    <app-header condenses reveals effects="waterfall">
       <app-toolbar>
-        <a href="/" title="imgur PWA">
           <h1 class="title">imgur PWA</h1>
-        </a>
       </app-toolbar>
     </app-header>
+
+    <div>
+      <paper-input on-input="get_images" label="subreddit" value="{{subredditData.subredditName}}" type="search" autofocus="true">
+        <div class="inputPrefix" slot="prefix">r/</div>
+      </paper-input>
+    </div>
+
+    <!--
+    <img-box></img-box>
+    -->
+
+    <!--
+    <iron-pages selected="[[view]]" attr-for-selected="name" fallback-selection="list">
+      <img-list-page name="list" subroute="[[subroute]]"></img-list-page>
+      <img-details-page name="details" subroute="[[subroute]]"></img-details-page>
+    </iron-pages>
+    -->
   </template>
 
   <script>
@@ -32,14 +59,103 @@
      * @polymer
      */
     class ImgurPwa extends Polymer.Element {
-      static get is() { return 'imgur-pwa'; }
+      static get is() {
+        return 'imgur-pwa';
+      }
       static get properties() {
         return {
-          prop1: {
+          route: {
+            type: Object,
+            notify: true
+          },
+          subredditRoute: {
+            type: Object,
+            notify: true
+          },
+          subredditData: {
+            type: Object,
+            notify: true,
+            observer: '_subredditData'
+          },
+          path: {
             type: String,
-            value: 'imgur-pwa'
+            value: '/',
+            notify: true
           }
         };
+      }
+
+      static get observers() {
+        return ['subredditNameChanged(subredditData.subredditName)']
+      }
+
+      get_images(event) {
+        let subreddit_name = event.target.value.trim();
+
+        if(subreddit_name) {
+          this.route.path = "/subreddit";
+
+          if(this.path === '/') {
+            this.path = '/subreddit/' + subreddit_name;
+          }
+        } else {
+          this.path = '/';
+
+          return;
+        }
+
+        window.setTimeout(() => {
+          this.search(subreddit_name.trim())
+        }, 1000);
+      }
+
+      subredditNameChanged(subredditName) {
+        this.subredditData.subredditName = subredditName ? subredditName.trim() : '';
+
+        if(subredditName) {
+          this.path = '/subreddit/' + this.subredditData.subredditName;
+        }
+      }
+
+      _subredditData(newData, oldData) {
+        if(!oldData) {
+          if(!newData.subredditName) {
+            return;
+          }
+
+          this.search(newData.subredditName.trim())
+        }
+      }
+
+      search(subreddit_name) {
+        if(!subreddit_name || subreddit_name !== this.subredditData.subredditName.trim()) {
+          return;
+        }
+
+        fetch('https://api.imgur.com/3/gallery/r/' + subreddit_name + '/top/day', {method: "GET", headers: {"Authorization": "Client-ID 30928b75b48a449"}})
+        .then((response) => {
+          console.log(response.text());
+
+          if(response.ok)
+            return response.text()
+
+          throw new Error("Error!");
+        })
+        .then((response) => {
+          let returnedData = JSON.parse(response);
+
+          return this.$.list.loadImages(returnedData);
+        }, () => {
+          this.$.list.showNotFound();
+
+          throw new Error("Error!");
+        })
+        .then((response) => {
+          this.$.list.showImages();
+
+          return response;
+        })
+        .catch((err) => console.log(err));
       }
     }
 

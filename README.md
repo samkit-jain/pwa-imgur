@@ -1,6 +1,6 @@
-# \<imgur PWA\>
+# imgur PWA
 
-A Progressive Web App (PWA) version of imgur.com to display trending images in India.
+A Progressive Web App (PWA) to display trending images in a subreddit from imgur.com.
 
 ## Install the Polymer-CLI
 

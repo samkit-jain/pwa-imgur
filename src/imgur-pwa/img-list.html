@@ -1,0 +1,173 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="imgur-pwa">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+    
+    <app-header condenses reveals>
+      <app-toolbar>
+        <a href="/" title="imgur PWA">
+          <h1 class="title">imgur PWA</h1>
+        </a>
+      </app-toolbar>
+    </app-header>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ImgurPwa extends Polymer.Element {
+      static get is() { return 'imgur-pwa'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'imgur-pwa'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(ImgurPwa.is, ImgurPwa);
+  </script>
+</dom-module>
+
+<script>
+        class appMain extends Polymer.Element {
+            static get is() {
+                return 'app-main';
+            }
+            static get properties() {
+                return {
+                    headingHide: {
+                        type: Boolean,
+                        value: false
+                    },
+                    route: {
+                        type: Object,
+                        notify: true
+                    },
+                    userRoute: {
+                        type: Object,
+                        notify: true
+                    },
+                    userData: {
+                        type: Object,
+                        notify: true,
+                        observer: '_userData'
+                    },
+                    path: {
+                        type: String,
+                        value: '/',
+                        notify: true
+                    },
+                    spinnerContent: {
+                        type: String,
+                        notify: true,
+                        value: ""
+                    }
+                };
+            }
+            static get observers() {
+                return [
+                    'userNameChanged(userData.username)'
+                ]
+            }
+            searchinit(event) {
+                let userName = event.target.value.trim();
+                if (userName) {
+                    this.route.path = "/user";
+                    if (this.path === '/')
+                        this.path = '/user/' + userName;
+                }
+                else {
+                    this.path = '/';
+                    this.showHeading();
+                    return;
+                }
+                window.setTimeout(() => {
+                    this.search(userName.trim())
+                }, 1000);
+            }
+            userNameChanged(username) {
+                this.userData.username = username ? username.trim() : '';
+                if (username)
+                    this.path = '/user/' + this.userData.username;
+            }
+            _userData(newData, oldData) {
+                if (!oldData) {
+                    if (!newData.username) {
+                        this.showHeading();
+                        return;
+                    }
+                    this.search(newData.username.trim());
+                }
+            }
+            hideHeading() {
+                this.headingHide = true;
+            }
+            showHeading() {
+                this.headingHide = false;
+                this.$.content.hideBox();
+            }
+            hideSpinner() {
+                this.$.spinner.hidden = true;
+                this.$.spinnerCircle.active = false;
+                this.$.content.showBox();
+            }
+            showSpinner() {
+                this.$.content.hideBox();
+                this.spinnerContent = "Searching for the user";
+                this.$.spinnerCircle.active = true;
+                this.$.spinner.hidden = false;
+            }
+            search(userName) {
+                if (!userName || userName !== this.userData.username.trim())
+                    return;
+                this.hideHeading();
+                this.showSpinner();
+                fetch('https://api.github.com/users/'
+                    + userName
+                    + '?client_id=306bffb6acf1e4b78303&client_secret=64f16f44d1346f04b72e6c9cb3f60e727b400c88'
+                    , {method: 'get'})
+                    .then((response) => {
+                        if (response.ok)
+                            return response.text();
+                        else
+                            throw new Error("User Not Found!");
+                    })
+                    .then((response) => {
+                        let user = JSON.parse(response);
+                        this.showSpinner();
+                        this.spinnerContent = "Analyzing the contributions";
+                        return this.$.content.loadContent(user);
+                    }, () => {
+                        this.$.content.showNotFound();
+                        this.hideSpinner();
+                        throw new Error("not found");
+                    })
+                    .then((response) => {
+                        this.$.content.showContent();
+                        this.hideSpinner();
+                        return response;
+                    })
+                    .catch((err) => console.log(err));
+            }
+        }
+        window.customElements.define(appMain.is, appMain);
+    </script>

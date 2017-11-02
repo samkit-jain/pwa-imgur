@@ -11,8 +11,9 @@
 
     <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
-    <link rel="import" href="/src/imgur-pwa/imgur-pwa.html">
     <link rel="import" href="/bower_components/app-layout/app-layout.html">
+    
+    <link rel="import" href="/src/imgur-pwa/imgur-pwa.html">
 
     <script>
         if ('serviceWorker' in navigator) {
@@ -34,6 +35,7 @@
   </head>
 
   <body>
+    <noscript>JavaScript support missing!</noscript>
     <imgur-pwa></imgur-pwa>
   </body>
 </html>
