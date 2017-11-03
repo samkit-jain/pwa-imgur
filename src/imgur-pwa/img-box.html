@@ -1,0 +1,36 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="img-box">
+  <template>
+    <paper-card>
+      <div class="card-content">
+        <img src="{{image.link}}" width="250px" height="250px">
+        <div class="header">{{image.title}}</div>
+      </div>
+    </paper-card>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ImgurBox extends Polymer.Element {
+      static get is() {
+        return 'img-box';
+      }
+      static get properties() {
+        // remove unused objects and methods
+        return {
+          image: {
+            type: Object,
+            notify: true,
+            reflectToAttribute: true
+          }
+        };
+      }
+    }
+
+    window.customElements.define(ImgurBox.is, ImgurBox);
+  </script>
+</dom-module>

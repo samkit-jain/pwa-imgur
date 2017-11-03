@@ -1,17 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="img-box.html">
+
 <dom-module id="img-list">
   <template>
-    <paper-card heading="Emmental" image="http://placehold.it/350x150/FFC107/000000" alt="Emmental">
-      <div class="card-content">
-        text here...
-      </div>
-    </paper-card>
-
-    <div>
-      <p id="rep"></p>
-    </div>
     
+    <div id="box"></div>
+
   </template>
 
   <script>
@@ -40,6 +35,10 @@
             type: Object,
             notify: true
           },
+          image: {
+            type: Object,
+            notify: true
+          },
           images: {
             type: Object,
             value: [],
@@ -60,13 +59,34 @@
         this.imageHide = true;
       }
 
-      showImage() {
-        this.showImage = true;
+      showImages() {
+        //pass
       }
 
       loadImages(data) {
-        console.log(data);
-        this.$.rep.text = data;
+        let imagesData = data.data;
+
+        this.$.box.innerHTML = "";
+
+        imagesData.forEach((ele) => {
+          let imageBox = document.createElement("img-box");
+          if(ele.in_gallery == false) {
+            imageBox.image = {
+              "title": ele.title,
+              "link": ele.link,
+            };
+          } else {
+            imageBox.image = {
+              "title": ele.title,
+              "link": ele.images[0].link,
+            };
+          }
+
+          console.log(imageBox);
+
+          this.$.box.appendChild(imageBox);
+          console.log(this.$.box);
+        });
       }
     }
 
