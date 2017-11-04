@@ -1,28 +1,31 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
-<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-location/iron-location.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="/bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 
 <link rel="import" href="img-list.html">
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <dom-module id="imgur-pwa">
   <template>
     <style>
-      :host {
-        display: block;
+      .jumbotron {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+        margin-bottom: 0;
+        background-color: #fff;
       }
 
-      app-header {
-        --app-header-shadow: {
-          box-shadow: inset 0px 5px 2px -3px rgba(0, 0, 0, 0.2);
-        };
+      .jumbotron-heading {
+        font-weight: 300;
+      }
+
+      .jumbotron .container {
+        max-width: 40rem;
       }
     </style>
 
@@ -30,18 +33,15 @@
     <app-route route="{{route}}" pattern="/subreddit" tail="{{subredditRoute}}"></app-route>
     <app-route route="{{subredditRoute}}" pattern="/:subredditName" data="{{subredditData}}"></app-route>
     <iron-location path="{{path}}"></iron-location>
-    
-    <app-header condenses reveals effects="waterfall">
-      <app-toolbar>
-          <h1 class="title">imgur PWA</h1>
-      </app-toolbar>
-    </app-header>
 
-    <div>
-      <paper-input on-input="get_images" label="subreddit" value="{{subredditData.subredditName}}" type="search" autofocus="true">
-        <div class="inputPrefix" slot="prefix">r/</div>
-      </paper-input>
-    </div>
+    <section class="jumbotron">
+      <div class="container">
+        <h1 class="jumbotron-heading text-center">imgur PWA</h1>
+        <paper-input on-input="get_images" label="subreddit" value="{{subredditData.subredditName}}" type="search" autofocus="true">
+          <div class="inputPrefix" slot="prefix">r/</div>
+        </paper-input>
+      </div>
+    </section>
 
     <img-list id="list"></img-list>
 

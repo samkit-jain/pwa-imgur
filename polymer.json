@@ -1,4 +1,22 @@
 {
+  "entrypoint": "index.html",
+  "shell": "src/imgur-pwa/imgur-pwa.html",
+  "sources": [
+    "src/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/webcomponents-lite.js"
+  ],
+  "builds": [
+    {
+      "name": "bundled",
+      "addServiceWorker": true,
+      "addPushManifest": true,
+      "insertPrefetchLinks": true
+    }
+  ],
   "lint": {
     "rules": [
       "polymer-2"
