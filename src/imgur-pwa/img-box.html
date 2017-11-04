@@ -15,8 +15,13 @@
         border: 0;
       }
 
-      .card > img {
+      img {
+        height: 250px;
+        max-width: 90%;
+        margin-top: .75rem;
         margin-bottom: .75rem;
+        margin-left: .75rem;
+        margin-right: .75rem;
       }
 
       .card-text {
@@ -25,7 +30,7 @@
     </style>
 
     <div class="card text-center">
-      <img src="{{image.link}}" height="250px">
+      <img src="{{image.link}}">
       <p class="card-text">{{image.title}}</p>
     </div>
   </template>
