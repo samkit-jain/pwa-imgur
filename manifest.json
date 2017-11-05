@@ -3,5 +3,10 @@
   "short_name": "imgur PWA",
   "description": "A Progressive Web App (PWA) version of imgur.com",
   "start_url": "/",
-  "display": "standalone"
+  "display": "standalone",
+  "orientation": "any",
+  "Scope": "/",
+  "start_url": "/index.html",
+  "lang": "en-US",
+  "splash_pages": null
 }
