@@ -3,7 +3,9 @@
   "shell": "src/imgur-pwa/imgur-pwa.html",
   "sources": [
     "src/**/*",
-    "bower.json"
+    "icons/**/*",
+    "bower.json",
+    "browserconfig.xml"
   ],
   "extraDependencies": [
     "manifest.json",
@@ -14,6 +16,7 @@
       "name": "bundled",
       "addServiceWorker": true,
       "addPushManifest": true,
+      "swPrecacheConfig": "precache-config.js",
       "insertPrefetchLinks": true
     }
   ],

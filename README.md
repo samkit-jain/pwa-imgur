@@ -1,6 +1,6 @@
 # imgur PWA
 
-A Progressive Web App (PWA) to display trending images in a subreddit from imgur.com.
+A Progressive Web App (PWA) to display images trending today in a subreddit from imgur.com
 
 # MIT License
 

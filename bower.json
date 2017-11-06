@@ -1,6 +1,6 @@
 {
   "name": "imgur PWA",
-  "description": "A Progressive Web App (PWA) to display trending images in a subreddit from imgur.com",
+  "description": "A Progressive Web App (PWA) to display images trending today in a subreddit from imgur.com",
   "main": "index.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
