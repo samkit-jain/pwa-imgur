@@ -68,6 +68,15 @@ module.exports = {
                     name: 'images'
                 }
             }
+        },
+        {
+            urlPattern: /^https:\/\/i\.imgur\.com\/.+/,
+            handler: 'cacheFirst',
+            options: {
+                cache: {
+                    name: 'image'
+                }
+            }
         }
     ]
 };
