@@ -74,7 +74,8 @@ module.exports = {
             handler: 'cacheFirst',
             options: {
                 cache: {
-                    name: 'image'
+                    name: 'image',
+                    maxAgeSeconds: 86400
                 }
             }
         }
