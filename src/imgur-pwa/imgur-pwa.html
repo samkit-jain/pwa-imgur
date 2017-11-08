@@ -206,7 +206,10 @@
           throw new Error("Not Found!");
         })
         .then((response) => {
-          this.$.list.showImages();
+          if(response === true) {
+            this.$.list.showImages();
+          }
+
           this.hideLoader();
 
           return response;

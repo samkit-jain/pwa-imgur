@@ -6,12 +6,13 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+
 <dom-module id="img-list">
   <template>
     <style>
       .album {
         overflow: auto;
-        padding-top: 3rem;
         background-color: #f7f7f7;
       }
 
@@ -20,15 +21,27 @@
         display: table;
         clear: both;
       }
+
+      h2 {
+        text-align: -webkit-center;
+        text-align: -moz-center;
+        font-family: 'Quicksand', sans-serif;
+        font-weight: 500;
+        font-size: 2em;
+      }
     </style>
     
     <div class="album text-muted" hidden$="{{hide}}">
       <div id="notFound" class="row" hidden$="{{notFoundHide}}">
-        <div id="noNetwork" hidden="{{noNetworkHide}}">
+        <div id="noNetwork" hidden$="{{noNetworkHide}}">
           <h2>Please check your Internet Connection!</h2>
         </div>
-    </div>
-      <div class="container">
+        <div id="noImage" hidden$="{{noImageHide}}">
+          <h2>No trending images!</h2>
+        </div>
+      </div>
+      
+      <div class="container" hidden$="{{imageHide}}">
         <div class="row">
           <div id="box"></div>
         </div>
@@ -63,10 +76,15 @@
             value: navigator.onLine,
             notify: true
           },
+          noImageHide: {
+            type: Boolean,
+            value: true,
+            notify: true
+          },
           imageHide: {
             type: Boolean,
-            notify: true,
-            value: false
+            value: false,
+            notify: true
           },
           subreddit: {
             type: Object,
@@ -91,6 +109,7 @@
       showNotFound() {
         this.notFoundHide = false;
         this.noNetworkHide = navigator.onLine;
+        this.noImageHide = true;
         this.hideImages();
       }
 
@@ -100,6 +119,13 @@
 
       showList() {
         this.hide = false;
+      }
+
+      showNoImage() {
+        this.notFoundHide = false;
+        this.noNetworkHide = true;
+        this.noImageHide = false;
+        this.hideImages();
       }
 
       hideImages() {
@@ -116,22 +142,30 @@
 
         this.$.box.innerHTML = "";
 
-        imagesData.forEach((ele) => {
-          let imageBox = document.createElement("img-box");
-          if(ele.in_gallery == false) {
-            imageBox.image = {
-              "title": ele.title,
-              "link": ele.link,
-            };
-          } else {
-            imageBox.image = {
-              "title": ele.title,
-              "link": ele.images[0].link,
-            };
-          }
-          
-          this.$.box.appendChild(imageBox);
-        });
+        if(imagesData.length > 0) {
+          imagesData.forEach((ele) => {
+            let imageBox = document.createElement("img-box");
+            if(ele.in_gallery == false) {
+              imageBox.image = {
+                "title": ele.title,
+                "link": ele.link,
+              };
+            } else {
+              imageBox.image = {
+                "title": ele.title,
+                "link": ele.images[0].link,
+              };
+            }
+            
+            this.$.box.appendChild(imageBox);
+          });
+
+          return true;
+        } else {
+          this.showNoImage();
+
+          return false;
+        }
       }
     }
 
