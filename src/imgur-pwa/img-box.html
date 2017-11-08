@@ -23,7 +23,7 @@
       }
 
       img {
-        height: auto;
+        max-height: 300px;
         width: 100%;
       }
 
@@ -48,12 +48,18 @@
         .column {
           width: 100%;
         }
+
+        img {
+          max-height: none;
+        }
       }
     </style>
 
     <div class="column">
       <img src="{{image.link}}">
-      <p class="card-text">{{image.title}}</p>
+      <a href="{{image.link}}">
+        <p class="card-text">{{image.title}}</p>
+      </a>
     </div>
   </template>
 
