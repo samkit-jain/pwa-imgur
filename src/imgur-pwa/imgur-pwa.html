@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-location/iron-location.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 
 <link rel="import" href="img-list.html">
 
@@ -44,6 +45,15 @@
         padding: 0;
       }
 
+      paper-progress {
+        display: block;
+        width: 100%;
+        margin: auto;
+        --paper-progress-active-color: #000000;
+        --paper-progress-secondary-color: #000000;
+        --paper-progress-height: 0.5em;
+      }
+
       footer {
         padding-top: 2rem;
         padding-bottom: 2rem;
@@ -72,6 +82,8 @@
       </div>
     </section>
 
+    <paper-progress indeterminate hidden$="{{loadHide}}"></paper-progress>
+
     <img-list id="list"></img-list>
 
     <footer>
@@ -91,6 +103,10 @@
       }
       static get properties() {
         return {
+          loadHide: {
+            type: Boolean,
+            value: true
+          },
           route: {
             type: Object,
             notify: true
@@ -136,6 +152,16 @@
         }, 1000);
       }
 
+      hideLoader() {
+        this.loadHide = true;
+        this.$.list.showList();
+      }
+
+      showLoader() {
+        this.loadHide = false;
+        this.$.list.hideList();
+      }
+
       subredditNameChanged(subredditName) {
         this.subredditData.subredditName = subredditName ? subredditName.trim() : '';
 
@@ -159,6 +185,8 @@
           return;
         }
 
+        this.showLoader();
+
         fetch('https://api.imgur.com/3/gallery/r/' + subreddit_name + '/top/day', {method: "GET", headers: {"Authorization": "Client-ID 30928b75b48a449"}})
         .then((response) => {
           if(response.ok)
@@ -168,15 +196,18 @@
         })
         .then((response) => {
           let returnedData = JSON.parse(response);
-          
+          this.showLoader();
+
           return this.$.list.loadImages(returnedData);
         }, () => {
           this.$.list.showNotFound();
+          this.hideLoader();
 
-          throw new Error("Error!");
+          throw new Error("Not Found!");
         })
         .then((response) => {
           this.$.list.showImages();
+          this.hideLoader();
 
           return response;
         })

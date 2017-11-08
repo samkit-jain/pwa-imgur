@@ -22,7 +22,12 @@
       }
     </style>
     
-    <div class="album text-muted">
+    <div class="album text-muted" hidden$="{{hide}}">
+      <div id="notFound" class="row" hidden$="{{notFoundHide}}">
+        <div id="noNetwork" hidden="{{noNetworkHide}}">
+          <h2>Please check your Internet Connection!</h2>
+        </div>
+    </div>
       <div class="container">
         <div class="row">
           <div id="box"></div>
@@ -42,11 +47,20 @@
         return 'img-list';
       }
       static get properties() {
-        // remove unused objects and methods
         return {
           hide: {
             type: Boolean,
             value: false,
+            notify: true
+          },
+          notFoundHide: {
+            type: Boolean,
+            value: true,
+            notify: true
+          },
+          noNetworkHide: {
+            type: Boolean,
+            value: navigator.onLine,
             notify: true
           },
           imageHide: {
@@ -70,20 +84,31 @@
         };
       }
 
+      hideNotFound() {
+        this.notFoundHide = true;
+      }
+
+      showNotFound() {
+        this.notFoundHide = false;
+        this.noNetworkHide = navigator.onLine;
+        this.hideImages();
+      }
+
       hideList() {
         this.hide = true;
       }
 
       showList() {
-        this.hide = true;
+        this.hide = false;
       }
 
-      hideImage() {
+      hideImages() {
         this.imageHide = true;
       }
 
       showImages() {
-        //pass
+        this.imageHide = false;
+        this.hideNotFound();
       }
 
       loadImages(data) {
