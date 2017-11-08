@@ -33,9 +33,11 @@
     <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
-    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-    
-    <link rel="import" href="/src/imgur-pwa/imgur-pwa.html">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
+    <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
 
     <script>
         if ('serviceWorker' in navigator) {
@@ -48,7 +50,11 @@
   </head>
 
   <body>
+    <imgur-pwa>loading...<br/></imgur-pwa>
+    <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    
+    <link rel="import" href="/src/imgur-pwa/imgur-pwa.html">
+
     <noscript>JavaScript support missing!</noscript>
-    <imgur-pwa></imgur-pwa>
   </body>
 </html>
