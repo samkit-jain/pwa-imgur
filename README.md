@@ -2,6 +2,11 @@
 
 A Progressive Web App (PWA) to display images trending today in a subreddit from imgur.com
 
+<p float="left">
+  <img src="screen1.png" width="49%">
+  <img src="screen2.png" width="49%">
+</p>
+
 # MIT License
 
 Copyright (c) 2017 Samkit Jain
