@@ -1,6 +1,7 @@
 # imgur PWA
 
 A Progressive Web App (PWA) to display images trending today in a subreddit from imgur.com
+<br/>Available at https://imgur-pwa.firebaseapp.com
 
 <p float="left">
   <img src="screen1.png" width="49%">
