@@ -5,6 +5,13 @@ A Progressive Web App (PWA) to display images trending today in a subreddit from
 
 <img src="video2gif_20171113_170543.gif" width="49%">
 
+# Features
+
+1. Offline support.
+2. Splash screen.
+3. Add to Home screen.
+4. Native app feel.
+
 # MIT License
 
 Copyright (c) 2017 Samkit Jain
